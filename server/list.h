@@ -15,14 +15,24 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <pthread.h>
 #endif /* list_h */
 
 typedef struct node {
     int live;
     char* name;
     struct node * next;
+    pthread_mutex_t* locker;
+    
+    void (*setMessage)(struct node* whom, char* message);
+    char* (*getMessage)(struct node* whom);
+    void (*freeMessage)(struct node* whom);
+    
+    char* message;
+
 } node_t;
+
+
 
 
 
@@ -30,4 +40,4 @@ node_t* create(void);
 char* print_list(node_t * head);
 void push(node_t * head, int val, char* name);
 int remove_by_index(node_t ** head, int n);
-int contains_name(node_t* head, char* name);
+node_t* contains_name(node_t* head, char* name);

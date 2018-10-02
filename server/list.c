@@ -22,8 +22,31 @@ node_t* create()
     head->live = 1;
     head->next = NULL;
     head->name = "Vasya\n";
+    head->message = NULL;
     
     return head;
+}
+
+void setMessage(struct node* whom, char* message)
+{
+    pthread_mutex_lock(whom->locker);
+    if(whom->message!=NULL)
+    {
+        free(whom->message);
+    }
+    whom->message = message;
+    
+    pthread_mutex_unlock(whom->locker);
+}
+
+void freeMessage(struct node* whom)
+{
+    pthread_mutex_lock(whom->locker);
+    if(whom->message!=NULL)
+    {
+        free(whom->message);
+    }
+    pthread_mutex_unlock(whom->locker);
 }
 
 char* print_list(node_t * head) {
@@ -77,16 +100,16 @@ int remove_by_index(node_t ** head, int n) {
     return retval;
     
 }
-int contains_name(node_t* head, char* name)
+node_t* contains_name(node_t* head, char* name)
 {
     node_t * current = head;
     while (current != NULL) {
         if(strncmp(name, current->name, sizeof(name))==0)
            {
-               return 1;
+               return current;
            }
     
         current = current->next;
     }
-    return 0;
+    return NULL;
 }
