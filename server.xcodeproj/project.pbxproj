@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A0F07292165133500D715F9 /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 3A0F07282165133500D715F9 /* utils.c */; };
 		3A2101FD2163D13B009C5DB5 /* gameProcessor.c in Sources */ = {isa = PBXBuildFile; fileRef = 3A2101FC2163D13B009C5DB5 /* gameProcessor.c */; };
 		3A8D868C215E9EBE00BA24AD /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 3A8D868B215E9EBE00BA24AD /* main.c */; };
 		3AAD7573215F7D7900485DC6 /* list.c in Sources */ = {isa = PBXBuildFile; fileRef = 3AAD7572215F7D7900485DC6 /* list.c */; };
@@ -25,6 +26,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3A0F07272165133500D715F9 /* utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		3A0F07282165133500D715F9 /* utils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
 		3A2101FB2163D13B009C5DB5 /* gameProcessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gameProcessor.h; sourceTree = "<group>"; };
 		3A2101FC2163D13B009C5DB5 /* gameProcessor.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = gameProcessor.c; sourceTree = "<group>"; };
 		3A8D8688215E9EBE00BA24AD /* server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = server; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,6 +71,8 @@
 				3AAD7572215F7D7900485DC6 /* list.c */,
 				3A2101FB2163D13B009C5DB5 /* gameProcessor.h */,
 				3A2101FC2163D13B009C5DB5 /* gameProcessor.c */,
+				3A0F07272165133500D715F9 /* utils.h */,
+				3A0F07282165133500D715F9 /* utils.c */,
 			);
 			path = server;
 			sourceTree = "<group>";
@@ -129,6 +134,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A8D868C215E9EBE00BA24AD /* main.c in Sources */,
+				3A0F07292165133500D715F9 /* utils.c in Sources */,
 				3AAD7573215F7D7900485DC6 /* list.c in Sources */,
 				3A2101FD2163D13B009C5DB5 /* gameProcessor.c in Sources */,
 			);

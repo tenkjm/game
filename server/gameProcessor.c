@@ -7,30 +7,6 @@
 //
 
 #include "gameProcessor.h"
-struct UserStore
-{
-    node_t* head;
-    node_t* (*create)(void);
-    char* (*print_list)(node_t * head);
-    void (*push)(node_t * head, int val, char* name);
-    int (*remove_by_index)(node_t ** head, int n);
-    node_t* (*contains_name)(node_t* head, char* name);
-};
-struct Command{
-    char* User;
-    int change;
-    
-}
-struct Game{
-    struct UserStore* userStore;
-    int commandsLen;
-    struct Command* commands;
-    char* (*who)(struct Game* game);
-    void (*wall)(struct Game* game,char* message);
-    void (*say)(struct Game* game,char* message, char* user);
-    void (*killUser)(struct Game* game,char* user);
-    void (*heal)(struct Game* game,char* user);
-};
 
 
 char* who(struct Game* game)
