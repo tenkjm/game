@@ -18,18 +18,22 @@
 #include <pthread.h>
 #endif /* list_h */
 
-typedef struct node {
+typedef struct User{
     int live;
     char* name;
-    struct node * next;
     pthread_mutex_t* locker;
-    
     void (*setMessage)(struct node* whom, char* message);
     char* (*getMessage)(struct node* whom);
     void (*freeMessage)(struct node* whom);
     
     char* message;
+} user_t;
 
+typedef struct node {
+    
+    struct node * next;
+    void* element;
+        
 } node_t;
 
 
@@ -38,6 +42,6 @@ typedef struct node {
 
 node_t* create(void);
 char* print_list(node_t * head);
-void push(node_t * head, int val, char* name);
+void push(node_t * head, node_t * node);
 int remove_by_index(node_t ** head, int n);
 node_t* contains_name(node_t* head, char* name);

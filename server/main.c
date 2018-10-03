@@ -15,7 +15,8 @@
 #include "gameProcessor.h"
 #include "utils.h"
 
-
+struct Game game;
+struct UserStore userStore;
 
 void *connection_handler(void *);
 int totalConnected=0;
@@ -150,65 +151,85 @@ void *connection_handler(void *handlerParameterPtr)
 
 int main(int argc , char *argv[])
 {
-   
-        head = create();
+    initializeGame(&game);
+    initializeUserStore(&userStore);
+    game.userStore = &userStore;
+    head = create();
+
+
+    struct sockaddr_in server , client;
+    char *message;
+
+
+    //Create socket
+    socket_desc = socket(AF_INET , SOCK_STREAM , 0);
+    if (socket_desc == -1)
+    {
+        printf("Could not create socket");
+    }
+
+    //Prepare the sockaddr_in structure
+    server.sin_family = AF_INET;
+    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_port = htons( 8080 );
+    int optval = 1;
     
     
-        struct sockaddr_in server , client;
-        char *message;
     
-    
-        //Create socket
-        socket_desc = socket(AF_INET , SOCK_STREAM , 0);
-        if (socket_desc == -1)
+    setsockopt(socket_desc, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+    //Bind
+    if( (Bind=bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) )< 0)
+    {
+        puts("bind failed");
+        return 1;
+    }
+    puts("bind done");
+
+    //Listen
+    Listen=listen(socket_desc , 3);
+
+    //Accept and incoming connection
+    puts("Waiting for incoming connections...");
+    c = sizeof(struct sockaddr_in);
+    while( (new_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) )
+    {
+        puts("Connection accepted");
+
+        //Reply to the client
+        message = "Hello Client\n";
+        //  write(new_socket , message , strlen(message));
+
+        pthread_t sniffer_thread;
+        struct HahdlerParameter* handlerParameter = malloc(sizeof(struct HahdlerParameter));
+        handlerParameter->sock = new_socket;
+        handlerParameter->game = &game;
+        
+        typedef struct node {
+            int live;
+            char* name;
+            struct node * next;
+            pthread_mutex_t* locker;
+            
+            void (*setMessage)(struct node* whom, char* message);
+            char* (*getMessage)(struct node* whom);
+            void (*freeMessage)(struct node* whom);
+            
+            char* message;
+            
+        } node_t;
+        struct node_t* node = malloc(sizeof(struct node_t*));
+        userStore.push(node);
+        handlerParameter->myNode = node;
+
+        if( pthread_create( &sniffer_thread , NULL ,  connection_handler , (void*) new_sock) < 0)
         {
-            printf("Could not create socket");
-        }
-    
-        //Prepare the sockaddr_in structure
-        server.sin_family = AF_INET;
-        server.sin_addr.s_addr = INADDR_ANY;
-        server.sin_port = htons( 8080 );
-        int optval = 1;
-        setsockopt(socket_desc, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
-        //Bind
-        if( (Bind=bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) )< 0)
-        {
-            puts("bind failed");
+            perror("could not create thread");
             return 1;
         }
-        puts("bind done");
-    
-        //Listen
-        Listen=listen(socket_desc , 3);
-    
-        //Accept and incoming connection
-        puts("Waiting for incoming connections...");
-        c = sizeof(struct sockaddr_in);
-        while( (new_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) )
-        {
-            puts("Connection accepted");
-    
-            //Reply to the client
-            message = "Hello Client\n";
-            //  write(new_socket , message , strlen(message));
-    
-            pthread_t sniffer_thread;
-            new_sock = malloc(1);
-            *new_sock = new_socket;
-            
-            
-            print_list(head);
-    
-            if( pthread_create( &sniffer_thread , NULL ,  connection_handler , (void*) new_sock) < 0)
-            {
-                perror("could not create thread");
-                return 1;
-            }
-    
-    
-            puts("Handler assigned");
-        }
+
+
+        puts("Handler assigned");
+    }
     
 }
 

@@ -19,34 +19,34 @@ node_t* create()
         return NULL;
     }
     
-    head->live = 1;
+    ((user_t*)head->element)->live = 1;
     head->next = NULL;
-    head->name = "Vasya\n";
-    head->message = NULL;
+    ((user_t*)head->element)->name = "Vasya\n";
+    ((user_t*)head->element)->message = NULL;
     
     return head;
 }
 
 void setMessage(struct node* whom, char* message)
 {
-    pthread_mutex_lock(whom->locker);
-    if(whom->message!=NULL)
+    pthread_mutex_lock(((user_t*)whom->element)->locker);
+    if(((user_t*)whom->element)->message!=NULL)
     {
-        free(whom->message);
+        free(((user_t*)whom->element)->message);
     }
-    whom->message = message;
+    ((user_t*)whom->element)->message = message;
     
-    pthread_mutex_unlock(whom->locker);
+    pthread_mutex_unlock(((user_t*)whom->element)->locker);
 }
 
 void freeMessage(struct node* whom)
 {
-    pthread_mutex_lock(whom->locker);
-    if(whom->message!=NULL)
+    pthread_mutex_lock(((user_t*)whom->element)->locker);
+    if(((user_t*)whom->element)->message!=NULL)
     {
-        free(whom->message);
+        free(((user_t*)whom->element)->message);
     }
-    pthread_mutex_unlock(whom->locker);
+    pthread_mutex_unlock(((user_t*)whom->element)->locker);
 }
 
 char* print_list(node_t * head) {
@@ -55,7 +55,7 @@ char* print_list(node_t * head) {
     memset(string3, 0,  1000);
     
     while (current != NULL) {
-        strcat(string3, current->name);
+        strcat(string3, ((user_t*)current->element)->name);
         
         current = current->next;
     }
@@ -70,9 +70,9 @@ void push(node_t * head, int val, char* name) {
     
     /* now we can add a new variable */
     current->next = malloc(sizeof(node_t));
-    current->next->live = val;
-    current->next->name = malloc(strlen(name));
-    strcpy(current->next->name, name);
+    ((user_t*)current->next->element)->live = val;
+    ((user_t*)current->next->element)->name = malloc(strlen(name));
+    strcpy(((user_t*)current->next->element)->name, name);
     current->next->next = NULL;
 }
 int remove_by_index(node_t ** head, int n) {
