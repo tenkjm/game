@@ -62,7 +62,7 @@ char* print_list(node_t * head) {
     return string3;
 }
 
-void push(node_t * head, int val, char* name) {
+void push(node_t * head, user_t* user) {
     node_t * current = head;
     while (current->next != NULL) {
         current = current->next;
@@ -70,14 +70,12 @@ void push(node_t * head, int val, char* name) {
     
     /* now we can add a new variable */
     current->next = malloc(sizeof(node_t));
-    ((user_t*)current->next->element)->live = val;
-    ((user_t*)current->next->element)->name = malloc(strlen(name));
-    strcpy(((user_t*)current->next->element)->name, name);
+    current->next->element = (void*)user;
     current->next->next = NULL;
 }
-int remove_by_index(node_t ** head, int n) {
+node_t* remove_by_index(node_t ** head, int n) {
     int i = 0;
-    int retval = -1;
+    node_t* retval = NULL;
     node_t * current = *head;
     node_t * temp_node = NULL;
     
@@ -87,24 +85,24 @@ int remove_by_index(node_t ** head, int n) {
     
     for (i = 0; i < n-1; i++) {
         if (current->next == NULL) {
-            return -1;
+            return NULL;
         }
         current = current->next;
     }
     
     temp_node = current->next;
-    retval = temp_node->live;
+    
     current->next = temp_node->next;
     free(temp_node);
     
-    return retval;
+    return temp_node;
     
 }
 node_t* contains_name(node_t* head, char* name)
 {
     node_t * current = head;
     while (current != NULL) {
-        if(strncmp(name, current->name, sizeof(name))==0)
+        if(strncmp(name, ((user_t*)current->element)->name, sizeof(name))==0)
            {
                return current;
            }
@@ -113,3 +111,21 @@ node_t* contains_name(node_t* head, char* name)
     }
     return NULL;
 }
+
+//void setMessage(struct User* self, char* message)
+//{
+//    pthread_mutex_lock( self->locker);
+//    self->message = message;
+//    pthread_mutex_unlock( self->locker);
+//}
+//char* getMessage(struct User* self)
+//{
+//    return self->message;
+//}
+//void freeMessage(struct User* self)
+//{
+//    pthread_mutex_lock( self->locker);
+//    free(self->message);
+//    self->message = NULL;
+//    pthread_mutex_unlock( self->locker);
+//}

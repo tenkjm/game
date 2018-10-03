@@ -37,10 +37,10 @@ struct UserStore
 {
     node_t* head;
     node_t* (*create)(void);
-    char* (*print_list)(node_t * head);
-    void (*push)(node_t * head, int val, char* name);
-    int (*remove_by_index)(node_t ** head, int n);
-    node_t* (*contains_name)(node_t* head, char* name);
+    char* (*print_list)(node_t * );
+    void (*push)(node_t * , user_t* );
+    node_t* (*remove_by_index)(node_t ** , int );
+    node_t* (*contains_name)(node_t* , char* );
 };
 struct Command{
     char* User;

@@ -19,7 +19,7 @@ void wall(struct Game* game,char* message)
     node_t* current =game->userStore->head;
     while(current!=NULL)
     {
-        current->setMessage(current, message);
+        ((user_t*)current->element)->setMessage(current, message);
         current=current->next;
     }
 }
@@ -27,7 +27,7 @@ void wall(struct Game* game,char* message)
 void say(struct Game* game,char* message, char* user)
 {
     node_t* elem = game->userStore->contains_name(game->userStore, user);
-    elem->setMessage(elem, message);
+    ((user_t*)elem->element)->setMessage(elem, message);
 }
 void killUser(struct Game* game,char* user)
 {
