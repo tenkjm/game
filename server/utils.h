@@ -9,9 +9,6 @@
 #ifndef utils_h
 #define utils_h
 
-#include <stdio.h>
-
-#endif /* utils_h */
 
 enum CommandType{
     WHO,
@@ -23,12 +20,13 @@ enum CommandType{
 };
 
 
-
 struct HahdlerParameter{
     int sock;
     struct Game* game;
-    struct node* myNode;
+
 };
 
-char* getParamTwoString(char* message);
+char* getParamTwoString(char* message, int all);
 char* getParamThreeString(char* message);
+
+#endif /* utils_h */

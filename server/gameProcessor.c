@@ -9,6 +9,25 @@
 #include "gameProcessor.h"
 
 
+void initializeGame(struct Game* game)
+{
+    game->who = who;
+    game->wall = wall;
+    game->say = say;
+    game->killUser = killUser;
+    game->heal = heal;
+}
+
+void initializeUserStore(struct UserStore* userStore)
+{
+    userStore->contains_name = contains_name;
+    userStore->create = create;
+    userStore->print_list = print_list;
+    userStore->push = push;
+    userStore->remove_by_index = remove_by_index;
+    userStore->contains_name = contains_name;
+}
+
 char* who(struct Game* game)
 {
     return game->userStore->print_list(game->userStore->head);
@@ -16,18 +35,18 @@ char* who(struct Game* game)
 
 void wall(struct Game* game,char* message)
 {
-    node_t* current =game->userStore->head;
+    node_tlist* current =game->userStore->head;
     while(current!=NULL)
     {
-        ((user_t*)current->element)->setMessage(current, message);
+        ((user_tlist*)current->element)->setMessage(((user_tlist*)current->element), message);
         current=current->next;
     }
 }
 
 void say(struct Game* game,char* message, char* user)
 {
-    node_t* elem = game->userStore->contains_name(game->userStore, user);
-    ((user_t*)elem->element)->setMessage(elem, message);
+    node_tlist* elem = game->userStore->contains_name(game->userStore->head, user);
+    ((user_tlist*)elem->element)->setMessage((user_tlist*)elem->element, message);
 }
 void killUser(struct Game* game,char* user)
 {

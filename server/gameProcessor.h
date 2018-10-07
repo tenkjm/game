@@ -9,10 +9,7 @@
 #ifndef gameProcessor_h
 #define gameProcessor_h
 
-#include <stdio.h>
 #include "list.h"
-
-#endif /* gameProcessor_h */
 
 struct Game{
     struct UserStore* userStore;
@@ -30,17 +27,17 @@ void wall(struct Game* game,char* message);
 void say(struct Game* game,char* message, char* user);
 void killUser(struct Game* game,char* user);
 void heal(struct Game* game,char* user);
-
-
+void initializeGame(struct Game* game);
+void initializeUserStore(struct UserStore* userStore);
 
 struct UserStore
 {
-    node_t* head;
-    node_t* (*create)(void);
-    char* (*print_list)(node_t * );
-    void (*push)(node_t * , user_t* );
-    node_t* (*remove_by_index)(node_t ** , int );
-    node_t* (*contains_name)(node_t* , char* );
+    node_tlist* head;
+    node_tlist* (*create)(void);
+    char* (*print_list)(node_tlist * );
+    node_tlist *  (*push)(node_tlist * , user_tlist* );
+    node_tlist* (*remove_by_index)(node_tlist ** , int );
+    node_tlist* (*contains_name)(node_tlist* , char* );
 };
 struct Command{
     char* User;
@@ -48,22 +45,4 @@ struct Command{
 };
 
 
-
-void initializeGame(struct Game* game)
-{
-    game->who = who;
-    game->wall = wall;
-    game->say = say;
-    game->killUser = killUser;
-    game->heal = heal;
-}
-
-void initializeUserStore(struct UserStore* userStore)
-{
-    userStore->contains_name = contains_name;
-    //userStore->create = creat;
-    userStore->print_list = print_list;
-    userStore->push = push;
-    userStore->remove_by_index = remove_by_index;
-    userStore->contains_name = contains_name;
-}
+#endif /* gameProcessor_h */

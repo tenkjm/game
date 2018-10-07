@@ -5,82 +5,104 @@
 //  Created by anton on 29.09.2018.
 //  Copyright © 2018 anton. All rights reserved.
 //
-
+#include <time.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include "list.h"
 
 
 
-
-node_t* create()
+node_tlist* create(user_tlist* user)
 {
-    node_t * head = NULL;
-    head = malloc(sizeof(node_t));
-    if (head == NULL) {
-        return NULL;
-    }
-    
-    ((user_t*)head->element)->live = 1;
+    node_tlist * head = malloc(sizeof(node_tlist));
+    head->element = (void*)malloc(sizeof(typeof (user_tlist)));
+    memcpy((user_tlist*)head->element, (user_tlist*)user, sizeof(typeof (user_tlist)));
     head->next = NULL;
-    ((user_t*)head->element)->name = "Vasya\n";
-    ((user_t*)head->element)->message = NULL;
-    
     return head;
 }
 
-void setMessage(struct node* whom, char* message)
+void setMessageU(struct User* whom, char* message)
 {
-    pthread_mutex_lock(((user_t*)whom->element)->locker);
-    if(((user_t*)whom->element)->message!=NULL)
-    {
-        free(((user_t*)whom->element)->message);
-    }
-    ((user_t*)whom->element)->message = message;
+    char* message_copy = malloc(sizeof(char)*strlen(message));
+    strcpy(message_copy, message);
+    pthread_mutex_lock(&(whom->locker));
+    (whom)->message = message_copy;
     
-    pthread_mutex_unlock(((user_t*)whom->element)->locker);
-}
-
-void freeMessage(struct node* whom)
-{
-    pthread_mutex_lock(((user_t*)whom->element)->locker);
-    if(((user_t*)whom->element)->message!=NULL)
+    if((whom)->message!=NULL)
     {
-        free(((user_t*)whom->element)->message);
+       write(whom->sock, message, strlen(message));
+       free(whom->message);
     }
-    pthread_mutex_unlock(((user_t*)whom->element)->locker);
+   
+    whom->message = NULL;
+    pthread_mutex_unlock(&(whom->locker));
 }
 
-char* print_list(node_t * head) {
-    node_t * current = head;
+char* getMessageU(struct User* whom)
+{
+    return whom->message;
+}
+
+char* print_list(node_tlist * head) {
+    node_tlist * current = head;
     char *string3 = malloc(1000);
     memset(string3, 0,  1000);
     
+    char *pwr = malloc(10);
+    memset(pwr, 0,  10);
+    
     while (current != NULL) {
-        strcat(string3, ((user_t*)current->element)->name);
+        
+        sprintf(pwr, " %d\n", ((user_tlist*)current->element)->live);
+       
+        strcat(string3, ((user_tlist*)current->element)->name);
+        strcat(string3, pwr);
         
         current = current->next;
     }
+
     return string3;
 }
 
-void push(node_t * head, user_t* user) {
-    node_t * current = head;
+ node_tlist * push(node_tlist * head, user_tlist* user) {
+    
+    if(head==NULL)
+    {
+        head = create(user);
+        return head;
+    }
+    
+    node_tlist * current = head;
+    
     while (current->next != NULL) {
         current = current->next;
     }
     
     /* now we can add a new variable */
-    current->next = malloc(sizeof(node_t));
+    current->next = malloc(sizeof(node_tlist));
     current->next->element = (void*)user;
     current->next->next = NULL;
+     return head;
 }
-node_t* remove_by_index(node_t ** head, int n) {
+node_tlist* remove_by_index(node_tlist ** head, int n) {
     int i = 0;
-    node_t* retval = NULL;
-    node_t * current = *head;
-    node_t * temp_node = NULL;
+    node_tlist* retval = NULL;
+    node_tlist* current = *head;
+    node_tlist* temp_node = NULL;
     
     if (n == 0) {
          free(head);
+         head=NULL;
+        return current;
     }
     
     for (i = 0; i < n-1; i++) {
@@ -98,11 +120,11 @@ node_t* remove_by_index(node_t ** head, int n) {
     return temp_node;
     
 }
-node_t* contains_name(node_t* head, char* name)
+node_tlist* contains_name(node_tlist* head, char* name)
 {
-    node_t * current = head;
+    node_tlist * current = head;
     while (current != NULL) {
-        if(strncmp(name, ((user_t*)current->element)->name, sizeof(name))==0)
+        if(strcmp(name, ((user_tlist*)(current->element))->name)==0)
            {
                return current;
            }
@@ -111,21 +133,3 @@ node_t* contains_name(node_t* head, char* name)
     }
     return NULL;
 }
-
-//void setMessage(struct User* self, char* message)
-//{
-//    pthread_mutex_lock( self->locker);
-//    self->message = message;
-//    pthread_mutex_unlock( self->locker);
-//}
-//char* getMessage(struct User* self)
-//{
-//    return self->message;
-//}
-//void freeMessage(struct User* self)
-//{
-//    pthread_mutex_lock( self->locker);
-//    free(self->message);
-//    self->message = NULL;
-//    pthread_mutex_unlock( self->locker);
-//}

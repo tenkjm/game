@@ -9,42 +9,36 @@
 #ifndef list_h
 #define list_h
 
-#include <stdio.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <string.h>
+
 #include <pthread.h>
-#endif /* list_h */
+#include <stdlib.h>
 
 
 
-typedef struct node {
-    
-    struct node * next;
+typedef struct node_element {
+    struct node_element * next;
     void* element;
-        
-} node_t;
+} node_tlist;
 
 typedef struct User{
     int live;
     char* name;
-    pthread_mutex_t* locker;
+    int sock;
+    pthread_mutex_t locker;
     void (*setMessage)(struct User* , char* );
     char* (*getMessage)(struct User* );
-    void (*freeMessage)(struct User* );
-    
+
     char* message;
-} user_t;
+} user_tlist;
 
 
-void setMessage(struct User* self, char* message);
-char* getMessage(struct User* self);
-void freeMessage(struct User* self);
+void setMessageU(struct User* self, char* message);
+char* getMessageU(struct User* self);
 
-node_t* create(void);
-char* print_list(node_t * head);
-void push(node_t * head, user_t * user);
-node_t* remove_by_index(node_t ** head, int n);
-node_t* contains_name(node_t* head, char* name);
+
+node_tlist* create(user_tlist* user);
+char* print_list(node_tlist * head);
+node_tlist * push(node_tlist * head, user_tlist* user);
+node_tlist* remove_by_index(node_tlist ** head, int n);
+node_tlist* contains_name(node_tlist* head, char* name);
+#endif /* list_h */
