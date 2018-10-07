@@ -69,15 +69,17 @@ void *timer_handler()
         {
             for (int i=0; i<game.commandsLen; i++)
             {
-                struct Command cmd = game.commands[i];
+              struct Command cmd = game.commands[i];
               node_tlist* user =  game.userStore->contains_name(game.userStore->head, cmd.User);
-              if(user!=NULL)
+              if(user != NULL)
               {
-                  ((user_tlist*)user->element)->live+= game.commands[i].change;
+                  ((user_tlist*)(user->element))->live=((user_tlist*)(user->element))->live-cmd.change;//((user_tlist*)(user->element))->live+cmd.change;
               }
-                free(game.commands);
-                game.commands=NULL;
+
             }
+            
+            
+            game.commandsLen = 0;
         }
     }
    
@@ -159,14 +161,17 @@ void *connection_handler(void *handlerParameterPtr)
                 handlerParameter.game->say(handlerParameter.game, send_message, user );
                 free(user);
                 free(message);
+                break;
             case KILL:
-                user = getParamTwoString(packet_str,0);
+                user = getParamTwoString(packet_str,1);
                 handlerParameter.game->killUser(handlerParameter.game,  user );
                 free(user);
+                break;
             case HEAL:
-                user = getParamTwoString(packet_str,0);
+                user = getParamTwoString(packet_str,1);
                 handlerParameter.game->heal(handlerParameter.game,  user );
                 free(user);
+                break;
             default:
                 break;
         }

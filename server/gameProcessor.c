@@ -50,8 +50,12 @@ void say(struct Game* game,char* message, char* user)
 }
 void killUser(struct Game* game,char* user)
 {
-    if (game->commands==NULL)
+    if (game->commandsLen==0)
     {
+        if(game->commands!=NULL)
+        {
+            free(game->commands);
+        }
         game->commands = malloc(sizeof(struct Command));
         game->commands[0].User=user;
         game->commands[0].change=-1;
@@ -60,13 +64,17 @@ void killUser(struct Game* game,char* user)
     }
     game->commands = realloc(game->commands, sizeof(struct Command)*(game->commandsLen+1));
     game->commandsLen+=1;
-    game->commands[game->commandsLen-1].User=user;
+    game->commands[game->commandsLen-1].User = user;
     game->commands[game->commandsLen-1].change=-1;
 }
 void heal(struct Game* game,char* user)
 {
-    if (game->commands==NULL)
+    if (game->commandsLen==0)
     {
+        if(game->commands!=NULL)
+        {
+            free(game->commands);
+        }
         game->commands = malloc(sizeof(struct Command));
         game->commands[0].User=user;
         game->commands[0].change=1;

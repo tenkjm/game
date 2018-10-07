@@ -63,7 +63,6 @@ char* print_list(node_tlist * head) {
     while (current != NULL) {
         
         sprintf(pwr, " %d\n", ((user_tlist*)current->element)->live);
-       
         strcat(string3, ((user_tlist*)current->element)->name);
         strcat(string3, pwr);
         
@@ -122,6 +121,10 @@ node_tlist* remove_by_index(node_tlist ** head, int n) {
 }
 node_tlist* contains_name(node_tlist* head, char* name)
 {
+    if(name==NULL)
+    {
+        return NULL;
+    }
     node_tlist * current = head;
     while (current != NULL) {
         if(strcmp(name, ((user_tlist*)(current->element))->name)==0)
