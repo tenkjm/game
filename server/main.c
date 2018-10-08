@@ -126,12 +126,12 @@ void *connection_handler(void *handlerParameterPtr)
     user_tlist* userElement;
     while((q = read(sock, packet_str, 100000))>=0)
     {
-        packet_str[q]='\0';
+        packet_str[q-1]=0;
         if(strlen(packet_str)<1)
         {
             continue;
         }
-        if(contains_name(handlerParameter.game->userStore->head, packet_str))
+        if(contains_name_index(handlerParameter.game->userStore->head, packet_str)>=0)
         {
             char *message;
             //Send some messages to the client
@@ -145,7 +145,7 @@ void *connection_handler(void *handlerParameterPtr)
             char* name = malloc(sizeof(typeof(char))*strlen(packet_str));
             
             strcpy(name, packet_str);
-            name[strlen(name)-1]=0;
+            
             userElement->name = name;
             userElement->live = 100;
             userElement->getMessage = getMessageU;

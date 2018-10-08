@@ -16,10 +16,6 @@
 
 
 
-typedef struct node_element {
-    struct node_element * next;
-    void* element;
-} node_tlist;
 
 typedef struct User{
     int live;
@@ -34,6 +30,10 @@ typedef struct User{
     void (*kill)(struct User*);
     char* message;
 } user_tlist;
+typedef struct node_element {
+    struct node_element * next;
+    user_tlist* element;
+} node_tlist;
 
 
 void setMessageU(struct User* self, char* message);
