@@ -64,6 +64,7 @@ void killUser(struct Game* game,char* user,  char* who)
         game->commandsLen=1;
         return;
     }
+    
     game->commands = realloc(game->commands, sizeof(struct Command)*(game->commandsLen+1));
     game->commandsLen+=1;
     game->commands[game->commandsLen-1].User = user;
