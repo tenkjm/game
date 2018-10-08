@@ -79,7 +79,9 @@ void *timer_handler()
                   ((user_tlist*)(user->element))->live=((user_tlist*)(user->element))->live-cmd.change;//((user_tlist*)(user->element))->live+cmd.change;
                   if(((user_tlist*)(user->element))->live<=0)
                   {
+                      printf("k");
                       ((user_tlist*)(user->element))->kill(((user_tlist*)(user->element)));
+                      printf("s");
                       shutdown(((user_tlist*)(user->element))->sock, SHUT_RDWR);
                       int index = game.userStore->contains_name_index(game.userStore->head, ((user_tlist*)(user->element))->name);
                       printf("before remove");
