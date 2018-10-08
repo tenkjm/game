@@ -184,6 +184,11 @@ void *connection_handler(void *handlerParameterPtr)
                 break;
             case SAY:
                 user = getParamTwoString(packet_str,0);
+                if(game.userStore->contains_name(game.userStore->head,user)==NULL)
+                {
+                    userElement->setMessage(userElement, "No such a user to say\n");
+                    break;
+                }
                 message = getParamThreeString(packet_str);
                 sprintf(send_message, "\n %s say: %s\n", userElement->name, message);
                 handlerParameter.game->say(handlerParameter.game, send_message, user );
