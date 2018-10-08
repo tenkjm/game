@@ -114,15 +114,16 @@ node_tlist* remove_by_index(node_tlist ** head, int n) {
         if (current->next == NULL) {
             return NULL;
         }
+        temp_node = current;
         current = current->next;
     }
     
-    temp_node = current->next;
     
-    current->next = temp_node->next;
-    free(temp_node);
     
-    return temp_node;
+    temp_node->next = current->next;
+    free(current);
+    
+    return NULL;
     
 }
 node_tlist* contains_name(node_tlist* head, char* name)
