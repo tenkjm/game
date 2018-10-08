@@ -183,7 +183,9 @@ void *connection_handler(void *handlerParameterPtr)
                 {
                     ((user_tlist*)game.userStore->contains_name(game.userStore->head,user)->element)->setMessage(((user_tlist*)game.userStore->contains_name(game.userStore->head,user)->element), "you under attack\n");
                 }
-                handlerParameter.game->killUser(handlerParameter.game,  user, userElement->name );
+                char * userCopu = createString(strlen(user));
+                strcpy(userCopu, user);
+                handlerParameter.game->killUser(handlerParameter.game, userCopu , userElement->name );
                 free(user);
                 break;
             case HEAL:
