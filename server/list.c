@@ -131,9 +131,9 @@ node_tlist* remove_by_index(node_tlist ** head, int n) {
     {
         temp_node->next = NULL;
     }
-    
+    printf("Before free\n");
     free(current);
-    
+    printf("After free\n");
     return NULL;
     
 }
