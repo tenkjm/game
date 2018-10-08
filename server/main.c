@@ -78,7 +78,8 @@ void *timer_handler()
               {
                   user_tlist* user =(user_tlist*)(userNode->element);
                   printf("life is %d\n", (user)->live);
-                  ((user)->live)=(user->live)-cmd.change;//((user_tlist*)(user->element))->live+cmd.change;
+                  int life =user->live;
+                  ((user)->live)=life-cmd.change;//((user_tlist*)(user->element))->live+cmd.change;
                   if(((user)->live)<=0)
                   {
                       printf("k");
