@@ -81,9 +81,9 @@ void *timer_handler()
                   int life = user->live-cmd.change;
                   printf("life= %d \n", life);
                   
-                  (user->live)=life;//((user_tlist*)(user->element))->live+cmd.change;
+                  //(user->live)=life;//((user_tlist*)(user->element))->live+cmd.change;
                   printf("kompare");
-                  if((user->live)<=0)
+                  if((life)<=0)
                   {
                       printf("k");
                       (user)->kill((user));
