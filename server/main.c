@@ -73,6 +73,7 @@ void *timer_handler()
               node_tlist* user =  game.userStore->contains_name(game.userStore->head, cmd.User);
               if(user != NULL)
               {
+                  printf("life is %d\n", ((user_tlist*)(user->element))->live);
                   ((user_tlist*)(user->element))->live=((user_tlist*)(user->element))->live-cmd.change;//((user_tlist*)(user->element))->live+cmd.change;
                   if(((user_tlist*)(user->element))->live<=0)
                   {
