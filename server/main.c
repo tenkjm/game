@@ -82,7 +82,7 @@ void *timer_handler()
                       ((user_tlist*)(user->element))->kill(((user_tlist*)(user->element)));
                       shutdown(((user_tlist*)(user->element))->sock, SHUT_RDWR);
                       int index = game.userStore->contains_name_index(game.userStore->head, ((user_tlist*)(user->element))->name);
-                      
+                      printf("before remove");
                       game.userStore->remove_by_index(&(game.userStore->head), index);
                       game.wall(&game, "somebody ripped");
                       node_tlist* userAttacker =  game.userStore->contains_name(game.userStore->head, cmd.FromUser);
