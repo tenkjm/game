@@ -81,9 +81,9 @@ void *timer_handler()
                   int life = user->live-cmd.change;
                   printf("life= %d \n", life);
                   
-                  //(user->live)=life;//((user_tlist*)(user->element))->live+cmd.change;
+                 
                   printf("kompare");
-                  if((life)<=0)
+                  if((life)==0)
                   {
                       printf("k");
                       (user)->kill((user));
@@ -95,6 +95,10 @@ void *timer_handler()
                       game.wall(&game, "somebody ripped");
                       node_tlist* userAttacker =  game.userStore->contains_name(game.userStore->head, cmd.FromUser);
                       ((user_tlist*)userAttacker->element)->setMessage(((user_tlist*)userAttacker->element),"you killed");
+                  }
+                  else
+                  {
+                       (user->live)=life;//((user_tlist*)(user->element))->live+cmd.change;
                   }
               }
             }
