@@ -86,15 +86,16 @@ void *timer_handler()
                   if(life==0)
                   {
                       printf("k");
+                      shutdown((user)->sock, SHUT_RDWR);
                       //(user)->kill((user));
                       printf("s");
-                      //shutdown((user)->sock, SHUT_RDWR);
+                      
                       int index = game.userStore->contains_name_index(game.userStore->head, (user)->name);
                       printf("before remove");
                       game.userStore->remove_by_index(&(game.userStore->head), index);
-                      game.wall(&game, "somebody ripped");
+                      game.wall(&game, "\nsomebody ripped\n");
                       node_tlist* userAttacker =  game.userStore->contains_name(game.userStore->head, cmd.FromUser);
-                      ((user_tlist*)userAttacker->element)->setMessage(((user_tlist*)userAttacker->element),"you killed");
+                      ((user_tlist*)userAttacker->element)->setMessage(((user_tlist*)userAttacker->element),"\nyou killed\n");
                   }
                   else
                   {
