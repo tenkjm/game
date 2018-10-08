@@ -87,6 +87,11 @@ char* getParamThreeString(char* message)
     return NULL;    
 }
 
-
+char* createString(int length)
+{
+    char* result = malloc(sizeof(typeof (char))*length);
+    memset(result, 0,  sizeof(typeof (char))*length);
+    return result;
+}
 
 

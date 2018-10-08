@@ -26,6 +26,7 @@ void initializeUserStore(struct UserStore* userStore)
     userStore->push = push;
     userStore->remove_by_index = remove_by_index;
     userStore->contains_name = contains_name;
+    userStore->contains_name_index = contains_name_index;
 }
 
 char* who(struct Game* game)
@@ -48,7 +49,7 @@ void say(struct Game* game,char* message, char* user)
     node_tlist* elem = game->userStore->contains_name(game->userStore->head, user);
     ((user_tlist*)elem->element)->setMessage((user_tlist*)elem->element, message);
 }
-void killUser(struct Game* game,char* user)
+void killUser(struct Game* game,char* user,  char* who)
 {
     if (game->commandsLen==0)
     {
@@ -58,14 +59,16 @@ void killUser(struct Game* game,char* user)
         }
         game->commands = malloc(sizeof(struct Command));
         game->commands[0].User=user;
-        game->commands[0].change=-1;
+        game->commands[0].change=50;
+        game->commands[0].FromUser = who;
         game->commandsLen=1;
         return;
     }
     game->commands = realloc(game->commands, sizeof(struct Command)*(game->commandsLen+1));
     game->commandsLen+=1;
     game->commands[game->commandsLen-1].User = user;
-    game->commands[game->commandsLen-1].change=-1;
+    game->commands[game->commandsLen-1].FromUser = who;
+    game->commands[game->commandsLen-1].change=50;
 }
 void heal(struct Game* game,char* user)
 {
@@ -77,12 +80,12 @@ void heal(struct Game* game,char* user)
         }
         game->commands = malloc(sizeof(struct Command));
         game->commands[0].User=user;
-        game->commands[0].change=1;
+        game->commands[0].change=-50;
         game->commandsLen=1;
         return;
     }
     game->commands = realloc(game->commands, sizeof(struct Command)*(game->commandsLen+1));
     game->commandsLen+=1;
     game->commands[game->commandsLen-1].User=user;
-    game->commands[game->commandsLen-1].change=1;
+    game->commands[game->commandsLen-1].change=-50;
 }

@@ -18,14 +18,14 @@ struct Game{
     char* (*who)(struct Game*);
     void (*wall)(struct Game*,char* );
     void (*say)(struct Game* ,char* , char* );
-    void (*killUser)(struct Game* ,char* );
+    void (*killUser)(struct Game* ,char* , char*);
     void (*heal)(struct Game* ,char* );
 };
 
 char* who(struct Game* game);
 void wall(struct Game* game,char* message);
 void say(struct Game* game,char* message, char* user);
-void killUser(struct Game* game,char* user);
+void killUser(struct Game* game,char* user, char* who);
 void heal(struct Game* game,char* user);
 void initializeGame(struct Game* game);
 void initializeUserStore(struct UserStore* userStore);
@@ -38,8 +38,10 @@ struct UserStore
     node_tlist *  (*push)(node_tlist * , user_tlist* );
     node_tlist* (*remove_by_index)(node_tlist ** , int );
     node_tlist* (*contains_name)(node_tlist* , char* );
+    int (*contains_name_index)(node_tlist* , char* );
 };
 struct Command{
+    char* FromUser;
     char* User;
     int change;
 };

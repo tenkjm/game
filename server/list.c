@@ -21,6 +21,7 @@
 
 
 
+
 node_tlist* create(user_tlist* user)
 {
     node_tlist * head = malloc(sizeof(node_tlist));
@@ -47,6 +48,10 @@ void setMessageU(struct User* whom, char* message)
     pthread_mutex_unlock(&(whom->locker));
 }
 
+void killU(struct User* self)
+{
+    pthread_kill(self->pthread, self->thread);
+}
 char* getMessageU(struct User* whom)
 {
     return whom->message;
@@ -54,10 +59,10 @@ char* getMessageU(struct User* whom)
 
 char* print_list(node_tlist * head) {
     node_tlist * current = head;
-    char *string3 = malloc(1000);
+    char *string3 = createString(1000);
     memset(string3, 0,  1000);
     
-    char *pwr = malloc(10);
+    char *pwr = createString(10);
     memset(pwr, 0,  10);
     
     while (current != NULL) {
@@ -99,8 +104,9 @@ node_tlist* remove_by_index(node_tlist ** head, int n) {
     node_tlist* temp_node = NULL;
     
     if (n == 0) {
-         free(head);
-         head=NULL;
+        node_tlist* t = *head;
+         free(*head);
+         *head=t->next;
         return current;
     }
     
@@ -135,4 +141,24 @@ node_tlist* contains_name(node_tlist* head, char* name)
         current = current->next;
     }
     return NULL;
+}
+
+int contains_name_index(node_tlist* head, char* name)
+{
+    if(name==NULL)
+    {
+        return -1;
+    }
+    int i = 0;
+    node_tlist * current = head;
+    while (current != NULL) {
+        
+        if(strcmp(name, ((user_tlist*)(current->element))->name)==0)
+        {
+            return i;
+        }
+        i++;
+        current = current->next;
+    }
+    return -1;
 }

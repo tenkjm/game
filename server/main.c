@@ -74,15 +74,22 @@ void *timer_handler()
               if(user != NULL)
               {
                   ((user_tlist*)(user->element))->live=((user_tlist*)(user->element))->live-cmd.change;//((user_tlist*)(user->element))->live+cmd.change;
+                  if(((user_tlist*)(user->element))->live<=0)
+                  {
+                      ((user_tlist*)(user->element))->kill(((user_tlist*)(user->element)));
+                      shutdown(((user_tlist*)(user->element))->sock, SHUT_RDWR);
+                      int index = game.userStore->contains_name_index(game.userStore->head, ((user_tlist*)(user->element))->name);
+                      
+                      game.userStore->remove_by_index(&(game.userStore->head), index);
+                      game.wall(&game, "somebody ripped");
+                      node_tlist* userAttacker =  game.userStore->contains_name(game.userStore->head, cmd.FromUser);
+                      ((user_tlist*)userAttacker->element)->setMessage(((user_tlist*)userAttacker->element),"you killed");
+                  }
               }
-
             }
-            
-            
             game.commandsLen = 0;
         }
     }
-   
 }
 
 void *connection_handler(void *handlerParameterPtr)
@@ -127,6 +134,7 @@ void *connection_handler(void *handlerParameterPtr)
             userElement->live = 100;
             userElement->getMessage = getMessageU;
             userElement->setMessage = setMessageU;
+            userElement->kill = killU;
             userElement->sock = handlerParameter.sock;
             handlerParameter.game->userStore->head=handlerParameter.game->userStore->push((handlerParameter.game->userStore->head), userElement);
             message = "you entered successfully\n";
@@ -141,12 +149,11 @@ void *connection_handler(void *handlerParameterPtr)
         enum CommandType command = getCommandType(packet_str);
         char* message = NULL;
         char* user = NULL;
-        char* send_message = malloc(sizeof(typeof(char))*1000);
+        char* send_message = createString(1000);
         switch (command) {
             case WHO:
                 message = handlerParameter.game->who(handlerParameter.game);
                 write(sock , message , strlen(message));
-               
                 break;
             case WALL:
                 message = getParamTwoString(packet_str, 1) ;
@@ -164,7 +171,16 @@ void *connection_handler(void *handlerParameterPtr)
                 break;
             case KILL:
                 user = getParamTwoString(packet_str,1);
-                handlerParameter.game->killUser(handlerParameter.game,  user );
+                if(game.userStore->contains_name(game.userStore->head,user)==NULL)
+                {
+                    userElement->setMessage(userElement, "No such a user to attack\n");
+                    break;
+                }
+                else
+                {
+                    ((user_tlist*)game.userStore->contains_name(game.userStore->head,user)->element)->setMessage(((user_tlist*)game.userStore->contains_name(game.userStore->head,user)->element), "you under attack\n");
+                }
+                handlerParameter.game->killUser(handlerParameter.game,  user, userElement->name );
                 free(user);
                 break;
             case HEAL:
@@ -191,8 +207,7 @@ int main(int argc , char *argv[])
     
     pthread_t sniffer_thread_main;
     pthread_create( &sniffer_thread_main , NULL ,  timer_handler , (void*) NULL);
-
-
+    
     struct sockaddr_in server , client;
     char *message;
 
@@ -237,17 +252,17 @@ int main(int argc , char *argv[])
         handlerParameter->sock = new_socket;
         handlerParameter->game = &game;
         
-        
         struct node_tlist* node = malloc(sizeof(struct node_tlist*));
-       
+        int thread_num;
+        handlerParameter->thread = &thread_num;
         
-        if( pthread_create( &sniffer_thread , NULL ,  connection_handler , (void*) handlerParameter) < 0)
+        (thread_num)= pthread_create( &sniffer_thread , NULL ,  connection_handler , (void*) handlerParameter);
+        
+        if( (thread_num) < 0)
         {
             perror("could not create thread");
             return 1;
         }
-
-
         puts("Handler assigned");
     }
     
