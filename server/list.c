@@ -104,9 +104,9 @@ node_tlist* remove_by_index(node_tlist ** head, int n) {
     node_tlist* temp_node = NULL;
     
     if (n == 0) {
-        node_tlist* t = *head;
+        node_tlist* t = (*head)->next;
          free(*head);
-         *head=t->next;
+         *head=t;
         return current;
     }
     
@@ -123,8 +123,15 @@ node_tlist* remove_by_index(node_tlist ** head, int n) {
     }
     
     
+    if(current->next!=NULL)
+    {
+        temp_node->next = current->next;
+    }
+    else
+    {
+        temp_node->next = NULL;
+    }
     
-    temp_node->next = current->next;
     free(current);
     
     return NULL;
