@@ -70,6 +70,8 @@ void *timer_handler()
             for (int i=0; i<game.commandsLen; i++)
             {
               struct Command cmd = game.commands[i];
+                
+                printf("User = %s\n", cmd.User);
               node_tlist* user =  game.userStore->contains_name(game.userStore->head, cmd.User);
               if(user != NULL)
               {
