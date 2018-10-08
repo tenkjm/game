@@ -79,9 +79,9 @@ void *timer_handler()
                   user_tlist* user =(user_tlist*)(userNode->element);
                   printf("life is %d\n", (user)->live);
                   int life = user->live-cmd.change;
-                  printf("chande= %d \n", cmd.change);
+                  printf("life= %d \n", life);
                   
-                  (user->live)-=cmd.change;//((user_tlist*)(user->element))->live+cmd.change;
+                  (user->live)=life;//((user_tlist*)(user->element))->live+cmd.change;
                   printf("kompare");
                   if((user->live)<=0)
                   {
