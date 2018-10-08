@@ -83,12 +83,12 @@ void *timer_handler()
                   
                  
                   printf("kompare");
-                  if((life)==0)
+                  if(life==0)
                   {
                       printf("k");
-                      (user)->kill((user));
+                      //(user)->kill((user));
                       printf("s");
-                      shutdown((user)->sock, SHUT_RDWR);
+                      //shutdown((user)->sock, SHUT_RDWR);
                       int index = game.userStore->contains_name_index(game.userStore->head, (user)->name);
                       printf("before remove");
                       game.userStore->remove_by_index(&(game.userStore->head), index);
