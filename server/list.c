@@ -50,7 +50,7 @@ void setMessageU(struct User* whom, char* message)
 
 void killU(struct User* self)
 {
-    pthread_kill(self->pthread, self->thread);
+    self->needStop = 1;
 }
 char* getMessageU(struct User* whom)
 {

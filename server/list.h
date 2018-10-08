@@ -26,6 +26,7 @@ typedef struct User{
     char* name;
     int sock;
     int thread;
+    int needStop;
     pthread_t* pthread;
     pthread_mutex_t locker;
     void (*setMessage)(struct User* , char* );

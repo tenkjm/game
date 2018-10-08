@@ -87,7 +87,7 @@ void *timer_handler()
                   {
                       printf("k");
                       shutdown((user)->sock, SHUT_RDWR);
-                      //(user)->kill((user));
+                      (user)->kill((user));
                       printf("s");
                       
                       int index = game.userStore->contains_name_index(game.userStore->head, (user)->name);
@@ -160,6 +160,11 @@ void *connection_handler(void *handlerParameterPtr)
     }
 
     while((q = read(sock, packet_str, 10000)) > 0){
+        if(userElement->needStop)
+        {
+            close(sock);
+            return 0;
+        }
         packet_str[q]='\0';
         printf("%s", packet_str);
         enum CommandType command = getCommandType(packet_str);
