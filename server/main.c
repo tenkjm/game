@@ -72,18 +72,20 @@ void *timer_handler()
               struct Command cmd = game.commands[i];
                 
                 printf("User = %s\n", cmd.User);
-              node_tlist* user =  game.userStore->contains_name(game.userStore->head, cmd.User);
-              if(user != NULL)
+              node_tlist* userNode =  game.userStore->contains_name(game.userStore->head, cmd.User);
+                
+              if(userNode != NULL)
               {
-                  printf("life is %d\n", ((user_tlist*)(user->element))->live);
-                  ((user_tlist*)(user->element))->live=((user_tlist*)(user->element))->live-cmd.change;//((user_tlist*)(user->element))->live+cmd.change;
-                  if(((user_tlist*)(user->element))->live<=0)
+                  user_tlist* user =(user_tlist*)(userNode->element);
+                  printf("life is %d\n", (user)->live);
+                  ((user)->live)=(user->live)-cmd.change;//((user_tlist*)(user->element))->live+cmd.change;
+                  if(((user)->live)<=0)
                   {
                       printf("k");
-                      ((user_tlist*)(user->element))->kill(((user_tlist*)(user->element)));
+                      (user)->kill((user));
                       printf("s");
-                      shutdown(((user_tlist*)(user->element))->sock, SHUT_RDWR);
-                      int index = game.userStore->contains_name_index(game.userStore->head, ((user_tlist*)(user->element))->name);
+                      shutdown((user)->sock, SHUT_RDWR);
+                      int index = game.userStore->contains_name_index(game.userStore->head, (user)->name);
                       printf("before remove");
                       game.userStore->remove_by_index(&(game.userStore->head), index);
                       game.wall(&game, "somebody ripped");
