@@ -110,12 +110,16 @@ node_tlist* remove_by_index(node_tlist ** head, int n) {
         return current;
     }
     
-    for (i = 0; i < n-1; i++) {
-        if (current->next == NULL) {
+    for (i = 0; i < n; i++) {
+        if (current == NULL) {
             return NULL;
         }
         temp_node = current;
         current = current->next;
+        if(i==n)
+        {
+            break;
+        }
     }
     
     
