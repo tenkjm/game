@@ -67,10 +67,11 @@ void *timer_handler()
                       
                       int index = game.userStore->contains_name_index(game.userStore->head, (user)->name);
                       printf("before remove");
+                      ((user_tlist*)userNode->element)->setMessage(((user_tlist*)userNode->element),"\nyou are killed\n");
                       game.userStore->remove_by_index(&(game.userStore->head), index);
                       game.wall(&game, "\nsomebody ripped\n");
                       node_tlist* userAttacker =  game.userStore->contains_name(game.userStore->head, cmd.FromUser);
-                      ((user_tlist*)userAttacker->element)->setMessage(((user_tlist*)userAttacker->element),"\nyou killed\n");
+                      ((user_tlist*)userAttacker->element)->setMessage(((user_tlist*)userAttacker->element),"\nyou kill\n");
                   }
                   else
                   {
@@ -151,7 +152,7 @@ void *connection_handler(void *handlerParameterPtr)
                 message = handlerParameter.game->who(handlerParameter.game);
                 if(message==NULL)
                 {
-                    break
+                    break;
                 }
                 write(sock , message , strlen(message));
                 break;
@@ -159,7 +160,7 @@ void *connection_handler(void *handlerParameterPtr)
                 message = getParamTwoString(packet_str, 1) ;
                 if(message==NULL)
                 {
-                    break
+                    break;
                 }
                 sprintf(send_message, "\n %s shouts: %s\n", userElement->name, message);
                 handlerParameter.game->wall(handlerParameter.game, send_message );
@@ -169,7 +170,7 @@ void *connection_handler(void *handlerParameterPtr)
                 user = getParamTwoString(packet_str,0);
                 if(user==NULL)
                 {
-                    break
+                    break;
                 }
                 if(game.userStore->contains_name(game.userStore->head,user)==NULL)
                 {
@@ -179,7 +180,7 @@ void *connection_handler(void *handlerParameterPtr)
                 message = getParamThreeString(packet_str);
                 if(message==NULL)
                 {
-                    break
+                    break;
                 }
                 sprintf(send_message, "\n %s say: %s\n", userElement->name, message);
                 handlerParameter.game->say(handlerParameter.game, send_message, user );
@@ -190,7 +191,7 @@ void *connection_handler(void *handlerParameterPtr)
                 user = getParamTwoString(packet_str,1);
                 if(user==NULL)
                 {
-                    break
+                    break;
                 }
                 if(game.userStore->contains_name(game.userStore->head,user)==NULL)
                 {
@@ -215,7 +216,7 @@ void *connection_handler(void *handlerParameterPtr)
                 user = getParamTwoString(packet_str,1);
                 if(user==NULL)
                 {
-                    break
+                    break;
                 }
                 if(game.userStore->contains_name(game.userStore->head,user)==NULL)
                 {
