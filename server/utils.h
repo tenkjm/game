@@ -43,5 +43,6 @@ char* getParamTwoString(char* message, int all);
 char* getParamThreeString(char* message);
 // Выделяем память под строку
 char* createString(int length);
+enum CommandType getCommandType(char* Message);
 
 #endif /* utils_h */

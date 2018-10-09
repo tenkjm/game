@@ -35,31 +35,6 @@ int socket_desc , new_socket , c , *new_sock, Bind, Listen;
 
 
 
-enum CommandType getCommandType(char* Message)
-{
-    
-    if(strncmp(Message, "who",3)==0){
-        return WHO;
-                }
-    else if(strncmp(Message, "wall", 4)==0){
-        return WALL;
-                }
-    else if(strncmp(Message,  "say", 3)==0){
-        return SAY;
-                }
-    else if(strncmp(Message,  "kill", 4)==0){
-        return KILL;
-    }
-    else if(strncmp(Message,  "heal", 4)==0){
-        return HEAL;
-    }
-    else{
-        return UNKNOWN;
-    }
-
-}
-
-
 void *timer_handler()
 {
     while(1){
@@ -71,7 +46,7 @@ void *timer_handler()
             {
               struct Command cmd = game.commands[i];
                 
-                printf("User = %s\n", cmd.User);
+              printf("User = %s\n", cmd.User);
               node_tlist* userNode =  game.userStore->contains_name(game.userStore->head, cmd.User);
                 
               if(userNode != NULL)
@@ -174,22 +149,38 @@ void *connection_handler(void *handlerParameterPtr)
         switch (command) {
             case WHO:
                 message = handlerParameter.game->who(handlerParameter.game);
+                if(message==NULL)
+                {
+                    break
+                }
                 write(sock , message , strlen(message));
                 break;
             case WALL:
                 message = getParamTwoString(packet_str, 1) ;
+                if(message==NULL)
+                {
+                    break
+                }
                 sprintf(send_message, "\n %s shouts: %s\n", userElement->name, message);
                 handlerParameter.game->wall(handlerParameter.game, send_message );
                 free(message);
                 break;
             case SAY:
                 user = getParamTwoString(packet_str,0);
+                if(user==NULL)
+                {
+                    break
+                }
                 if(game.userStore->contains_name(game.userStore->head,user)==NULL)
                 {
                     userElement->setMessage(userElement, "No such a user to say\n");
                     break;
                 }
                 message = getParamThreeString(packet_str);
+                if(message==NULL)
+                {
+                    break
+                }
                 sprintf(send_message, "\n %s say: %s\n", userElement->name, message);
                 handlerParameter.game->say(handlerParameter.game, send_message, user );
                 free(user);
@@ -197,6 +188,15 @@ void *connection_handler(void *handlerParameterPtr)
                 break;
             case KILL:
                 user = getParamTwoString(packet_str,1);
+                if(user==NULL)
+                {
+                    break
+                }
+                if(game.userStore->contains_name(game.userStore->head,user)==NULL)
+                {
+                    userElement->setMessage(userElement, "No such a user to say\n");
+                    break;
+                }
                 if(game.userStore->contains_name(game.userStore->head,user)==NULL)
                 {
                     userElement->setMessage(userElement, "No such a user to attack\n");
@@ -213,6 +213,15 @@ void *connection_handler(void *handlerParameterPtr)
                 break;
             case HEAL:
                 user = getParamTwoString(packet_str,1);
+                if(user==NULL)
+                {
+                    break
+                }
+                if(game.userStore->contains_name(game.userStore->head,user)==NULL)
+                {
+                    userElement->setMessage(userElement, "No such a user to say\n");
+                    break;
+                }
                 handlerParameter.game->heal(handlerParameter.game,  user );
                 free(user);
                 break;

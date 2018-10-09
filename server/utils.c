@@ -94,4 +94,26 @@ char* createString(int length)
     return result;
 }
 
-
+enum CommandType getCommandType(char* Message)
+{
+    
+    if(strncmp(Message, "who",3)==0){
+        return WHO;
+    }
+    else if(strncmp(Message, "wall", 4)==0){
+        return WALL;
+    }
+    else if(strncmp(Message,  "say", 3)==0){
+        return SAY;
+    }
+    else if(strncmp(Message,  "kill", 4)==0){
+        return KILL;
+    }
+    else if(strncmp(Message,  "heal", 4)==0){
+        return HEAL;
+    }
+    else{
+        return UNKNOWN;
+    }
+    
+}

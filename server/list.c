@@ -73,7 +73,7 @@ char* print_list(node_tlist * head) {
         
         current = current->next;
     }
-
+    free(pwr);
     return string3;
 }
 
@@ -132,7 +132,8 @@ node_tlist* remove_by_index(node_tlist ** head, int n) {
         temp_node->next = NULL;
     }
     printf("Before free\n");
-    free(current);
+    free(current->element);
+    free(current);    
     printf("After free\n");
     return NULL;
     
