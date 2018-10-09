@@ -61,23 +61,23 @@ void *timer_handler()
                   if(life==0)
                   {
                       printf("k");
+                      (userNode->element)->setMessage((userNode->element),"\nyou are killed\n");
                       shutdown((user)->sock, SHUT_RDWR);
                       (user)->kill((user));
                       printf("s");
                       
                       int index = game.userStore->contains_name_index(game.userStore->head, (user)->name);
                       printf("before remove");
-                      ((user_tlist*)userNode->element)->setMessage(((user_tlist*)userNode->element),"\nyou are killed\n");
-                      game.userStore->remove_by_index(&(game.userStore->head), index);
-                      game.wall(&game, "\nsomebody ripped\n");
                       
+      
                       node_tlist* current = game.userStore->head;
                       node_tlist* userAttacker =  game.userStore->contains_name(game.userStore->head, cmd.FromUser);
+                      game.userStore->remove_by_index(&(game.userStore->head), index);
                       while (current!=NULL)
                       {
                           if (current!=userNode && current != userAttacker )
                           {
-                              current->element->setMessage(current->element, "Somebody R.I.P.");
+                              current->element->setMessage(current->element, "\nSomebody R.I.P.\n");
                           }
                           current = current->next;
                       }
@@ -139,6 +139,7 @@ void *connection_handler(void *handlerParameterPtr)
             userElement->getMessage = getMessageU;
             userElement->setMessage = setMessageU;
             userElement->kill = killU;
+            userElement->needStop = 0;
             userElement->sock = handlerParameter.sock;
             handlerParameter.game->userStore->head=handlerParameter.game->userStore->push((handlerParameter.game->userStore->head), userElement);
             message = "you entered successfully\n";
@@ -153,7 +154,7 @@ void *connection_handler(void *handlerParameterPtr)
             close(sock);
             return 0;
         }
-        packet_str[q]='\0';
+        packet_str[q] = 0;
         printf("%s", packet_str);
         enum CommandType command = getCommandType(packet_str);
         char* message = NULL;
@@ -162,10 +163,7 @@ void *connection_handler(void *handlerParameterPtr)
         switch (command) {
             case WHO:
                 message = handlerParameter.game->who(handlerParameter.game);
-                if(message==NULL)
-                {
-                    break;
-                }
+
                 write(sock , message , strlen(message));
                 break;
             case WALL:
@@ -302,7 +300,7 @@ int main(int argc , char *argv[])
         handlerParameter->sock = new_socket;
         handlerParameter->game = &game;
         
-        struct node_tlist* node = malloc(sizeof(struct node_tlist*));
+        
         int thread_num;
         handlerParameter->thread = &thread_num;
         

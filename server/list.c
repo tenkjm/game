@@ -99,7 +99,7 @@ char* print_list(node_tlist * head) {
 }
 node_tlist* remove_by_index(node_tlist ** head, int n) {
     int i = 0;
-    node_tlist* retval = NULL;
+    
     node_tlist* current = *head;
     node_tlist* temp_node = NULL;
     
