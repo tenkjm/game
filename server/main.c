@@ -70,7 +70,19 @@ void *timer_handler()
                       ((user_tlist*)userNode->element)->setMessage(((user_tlist*)userNode->element),"\nyou are killed\n");
                       game.userStore->remove_by_index(&(game.userStore->head), index);
                       game.wall(&game, "\nsomebody ripped\n");
+                      
+                      node_tlist* current = game.userStore->head;
                       node_tlist* userAttacker =  game.userStore->contains_name(game.userStore->head, cmd.FromUser);
+                      while (current!=NULL)
+                      {
+                          if (current!=userNode && current != userAttacker )
+                          {
+                              current->element->setMessage(current->element, "Somebody R.I.P.");
+                          }
+                          current = current->next;
+                      }
+                      
+                      
                       ((user_tlist*)userAttacker->element)->setMessage(((user_tlist*)userAttacker->element),"\nyou kill\n");
                   }
                   else
