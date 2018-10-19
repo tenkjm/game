@@ -205,7 +205,7 @@ void *connection_handler(void *handlerParameterPtr)
                 }
                 if(game.userStore->contains_name(game.userStore->head,user)==NULL)
                 {
-                    userElement->setMessage(userElement, "No such a user to say\n");
+                    userElement->setMessage(userElement, "No such a user to kil\n");
                     break;
                 }
                 if(game.userStore->contains_name(game.userStore->head,user)==NULL)
@@ -230,10 +230,10 @@ void *connection_handler(void *handlerParameterPtr)
                 }
                 if(game.userStore->contains_name(game.userStore->head,user)==NULL)
                 {
-                    userElement->setMessage(userElement, "No such a user to say\n");
+                    userElement->setMessage(userElement, "No such a user to heal\n");
                     break;
                 }
-                handlerParameter.game->heal(handlerParameter.game,  user );
+                handlerParameter.game->heal(handlerParameter.game, createStringCopy( user) );
                 free(user);
                 break;
             default:

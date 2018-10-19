@@ -94,6 +94,13 @@ char* createString(int length)
     return result;
 }
 
+char* createStringCopy(char* src)
+{
+    char* result = malloc(sizeof(typeof (char))*strlen(src));
+    strcpy(result, src);
+    return result;
+}
+
 enum CommandType getCommandType(char* Message)
 {
     

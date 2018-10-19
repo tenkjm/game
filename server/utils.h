@@ -45,4 +45,6 @@ char* getParamThreeString(char* message);
 char* createString(int length);
 enum CommandType getCommandType(char* Message);
 
+
+char* createStringCopy(char* src);
 #endif /* utils_h */
