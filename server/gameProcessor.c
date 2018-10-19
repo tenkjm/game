@@ -36,18 +36,18 @@ char* who(struct Game* game)
 
 void wall(struct Game* game,char* message)
 {
-    node_tlist* current =game->userStore->head;
+    list_node* current =game->userStore->head;
     while(current!=NULL)
     {
-        ((user_tlist*)current->element)->setMessage(((user_tlist*)current->element), message);
+        ((user_element*)current->element)->setMessage(((user_element*)current->element), message);
         current=current->next;
     }
 }
 
 void say(struct Game* game,char* message, char* user)
 {
-    node_tlist* elem = game->userStore->contains_name(game->userStore->head, user);
-    ((user_tlist*)elem->element)->setMessage((user_tlist*)elem->element, message);
+    list_node* elem = game->userStore->contains_name(game->userStore->head, user);
+    ((user_element*)elem->element)->setMessage((user_element*)elem->element, message);
 }
 void killUser(struct Game* game,char* user,  char* who)
 {

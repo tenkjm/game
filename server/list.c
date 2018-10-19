@@ -22,11 +22,11 @@
 
 
 
-node_tlist* create(user_tlist* user)
+list_node* create(user_element* user)
 {
-    node_tlist * head = malloc(sizeof(node_tlist));
-    head->element = (void*)malloc(sizeof(typeof (user_tlist)));
-    memcpy((user_tlist*)head->element, (user_tlist*)user, sizeof(typeof (user_tlist)));
+    list_node * head = malloc(sizeof(list_node));
+    head->element = (void*)malloc(sizeof(typeof (user_element)));
+    memcpy((user_element*)head->element, (user_element*)user, sizeof(typeof (user_element)));
     head->next = NULL;
     return head;
 }
@@ -57,8 +57,8 @@ char* getMessageU(struct User* whom)
     return whom->message;
 }
 
-char* print_list(node_tlist * head) {
-    node_tlist * current = head;
+char* print_list(list_node * head) {
+    list_node * current = head;
     char *string3 = createString(1000);
     memset(string3, 0,  1000);
     
@@ -67,8 +67,8 @@ char* print_list(node_tlist * head) {
     
     while (current != NULL) {
         
-        sprintf(pwr, " %d\n", ((user_tlist*)current->element)->live);
-        strcat(string3, ((user_tlist*)current->element)->name);
+        sprintf(pwr, " %d\n", ((user_element*)current->element)->live);
+        strcat(string3, ((user_element*)current->element)->name);
         strcat(string3, pwr);
         
         current = current->next;
@@ -77,7 +77,7 @@ char* print_list(node_tlist * head) {
     return string3;
 }
 
- node_tlist * push(node_tlist * head, user_tlist* user) {
+ list_node * push(list_node * head, user_element* user) {
     
     if(head==NULL)
     {
@@ -85,26 +85,26 @@ char* print_list(node_tlist * head) {
         return head;
     }
     
-    node_tlist * current = head;
+    list_node * current = head;
     
     while (current->next != NULL) {
         current = current->next;
     }
     
     /* now we can add a new variable */
-    current->next = malloc(sizeof(node_tlist));
+    current->next = malloc(sizeof(list_node));
     current->next->element = (void*)user;
     current->next->next = NULL;
      return head;
 }
-node_tlist* remove_by_index(node_tlist ** head, int n) {
+list_node* remove_by_index(list_node ** head, int n) {
     int i = 0;
     
-    node_tlist* current = *head;
-    node_tlist* temp_node = NULL;
+    list_node* current = *head;
+    list_node* temp_node = NULL;
     
     if (n == 0) {
-        node_tlist* t = (*head)->next;
+        list_node* t = (*head)->next;
          free(*head);
          *head=t;
         return current;
@@ -138,15 +138,15 @@ node_tlist* remove_by_index(node_tlist ** head, int n) {
     return NULL;
     
 }
-node_tlist* contains_name(node_tlist* head, char* name)
+list_node* contains_name(list_node* head, char* name)
 {
     if(name==NULL)
     {
         return NULL;
     }
-    node_tlist * current = head;
+    list_node * current = head;
     while (current != NULL) {
-        if(strcmp(name, ((user_tlist*)(current->element))->name)==0)
+        if(strcmp(name, ((user_element*)(current->element))->name)==0)
            {
                return current;
            }
@@ -156,17 +156,17 @@ node_tlist* contains_name(node_tlist* head, char* name)
     return NULL;
 }
 
-int contains_name_index(node_tlist* head, char* name)
+int contains_name_index(list_node* head, char* name)
 {
     if(name==NULL)
     {
         return -1;
     }
     int i = 0;
-    node_tlist * current = head;
+    list_node * current = head;
     while (current != NULL) {
         
-        if(strcmp(name, ((user_tlist*)(current->element))->name)==0)
+        if(strcmp(name, ((user_element*)(current->element))->name)==0)
         {
             return i;
         }

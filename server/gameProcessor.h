@@ -32,13 +32,13 @@ void initializeUserStore(struct UserStore* userStore);
 
 struct UserStore
 {
-    node_tlist* head;
-    node_tlist* (*create)(void);
-    char* (*print_list)(node_tlist * );
-    node_tlist *  (*push)(node_tlist * , user_tlist* );
-    node_tlist* (*remove_by_index)(node_tlist ** , int );
-    node_tlist* (*contains_name)(node_tlist* , char* );
-    int (*contains_name_index)(node_tlist* , char* );
+    list_node* head;
+    list_node* (*create)(void);
+    char* (*print_list)(list_node * );
+    list_node *  (*push)(list_node * , user_element* );
+    list_node* (*remove_by_index)(list_node ** , int );
+    list_node* (*contains_name)(list_node* , char* );
+    int (*contains_name_index)(list_node* , char* );
 };
 struct Command{
     char* FromUser;

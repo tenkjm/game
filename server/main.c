@@ -47,11 +47,11 @@ void *timer_handler()
               struct Command cmd = game.commands[i];
                 
               printf("User = %s\n", cmd.User);
-              node_tlist* userNode =  game.userStore->contains_name(game.userStore->head, cmd.User);
+              list_node* userNode =  game.userStore->contains_name(game.userStore->head, cmd.User);
                 
               if(userNode != NULL)
               {
-                  user_tlist* user =(user_tlist*)(userNode->element);
+                  user_element* user =(user_element*)(userNode->element);
                   printf("life is %d\n", (user)->live);
                   int life = user->live-cmd.change;
                   printf("life= %d \n", life);
@@ -70,8 +70,8 @@ void *timer_handler()
                       printf("before remove");
                       
       
-                      node_tlist* current = game.userStore->head;
-                      node_tlist* userAttacker =  game.userStore->contains_name(game.userStore->head, cmd.FromUser);
+                      list_node* current = game.userStore->head;
+                      list_node* userAttacker =  game.userStore->contains_name(game.userStore->head, cmd.FromUser);
                       game.userStore->remove_by_index(&(game.userStore->head), index);
                       while (current!=NULL)
                       {
@@ -83,7 +83,7 @@ void *timer_handler()
                       }
                       
                       
-                      ((user_tlist*)userAttacker->element)->setMessage(((user_tlist*)userAttacker->element),"\nyou kill\n");
+                      ((user_element*)userAttacker->element)->setMessage(((user_element*)userAttacker->element),"\nyou kill\n");
                   }
                   else
                   {
@@ -111,7 +111,7 @@ void *connection_handler(void *handlerParameterPtr)
 
     printf("read\n");
     int q;
-    user_tlist* userElement;
+    user_element* userElement;
     while((q = read(sock, packet_str, 100000))>=0)
     {
         packet_str[q-1]=0;
@@ -128,7 +128,7 @@ void *connection_handler(void *handlerParameterPtr)
         }
         else
         {
-            userElement = malloc(sizeof(typeof (user_tlist)));
+            userElement = malloc(sizeof(typeof (user_element)));
             
             char* name = malloc(sizeof(typeof(char))*strlen(packet_str));
             
@@ -215,7 +215,7 @@ void *connection_handler(void *handlerParameterPtr)
                 }
                 else
                 {
-                    ((user_tlist*)game.userStore->contains_name(game.userStore->head,user)->element)->setMessage(((user_tlist*)game.userStore->contains_name(game.userStore->head,user)->element), "you under attack\n");
+                    ((user_element*)game.userStore->contains_name(game.userStore->head,user)->element)->setMessage(((user_element*)game.userStore->contains_name(game.userStore->head,user)->element), "you under attack\n");
                 }
                 char * userCopu = createString(strlen(user));
                 strcpy(userCopu, user);
